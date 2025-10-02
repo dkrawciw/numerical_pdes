@@ -25,15 +25,15 @@ plt.rcParams.update({
 n = 20
 x_range = (0, 5)
 y_range = (0, 5)
-h = (x_range[1] - x_range[0]) / n
+h = (x_range[1] - x_range[0]) / (n-1)
 
 x_vals = np.linspace(x_range[0], x_range[1], n)
 y_vals = np.linspace(y_range[0], y_range[1], n)
 X,Y = np.meshgrid(x_vals,y_vals, indexing='ij')
 
 # Defining that the forcing function has the h^2 term!!!
-forcing_fxn = lambda x, y: -2*np.sin(x)*np.cos(y) * h**2
-F = forcing_fxn(X[1:-1,1:-1],Y[1:-1,1:-1])
+forcing_fxn = lambda x, y: -2*np.sin(x)*np.cos(y)
+F = forcing_fxn(X[1:-1,1:-1],Y[1:-1,1:-1]) * h**2
 
 # Initialize solution matrix
 U = np.zeros((n,n))
@@ -77,6 +77,3 @@ plt.tight_layout()
 plt.savefig("output/problem4_1.svg")
 
 plt.clf()
-
-"""Generate Error Plots"""
-
