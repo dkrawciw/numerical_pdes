@@ -28,7 +28,7 @@ error_infnorm = []
 for num_points in np.linspace(5,100,num_of_step_sizes):
 
     num_points = int(num_points)
-    delta_x = (x_range[1] - x_range[0]) / num_points
+    delta_x = (x_range[1] - x_range[0]) / (num_points - 1)
 
     x_points = np.linspace(x_range[0],x_range[1], num_points)
     h.append(delta_x)
@@ -51,14 +51,14 @@ for num_points in np.linspace(5,100,num_of_step_sizes):
     error_infnorm.append(curr_error_infnorm)
 
 
-plt.plot(h, np.ones(num_of_step_sizes), '-r')
-plt.loglog(h, error_infnorm, "--o",label="$\infty$-Norm Relative Error")
-plt.loglog(h, error_2norm, '-o', label="2-Norm Relative Error")
+# plt.plot(h, np.ones(num_of_step_sizes), '-r')
+plt.loglog(h, error_infnorm, "--o",label=r"$\infty$-Norm Relative Error")
+plt.loglog(h, error_2norm, '-o', label=r"2-Norm Relative Error")
 
 plt.legend()
 plt.title("Comparing the Relative Errors of the 2-norm and\nthe $\infty$-norm as the Step Size Decreases")
-plt.ylabel("$\log \log$error")
-plt.xlabel("$h$")
+plt.ylabel(r"$\log \log$error")
+plt.xlabel(r"$h$")
 # increase number of xticks
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)

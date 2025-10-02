@@ -19,7 +19,7 @@ plt.rcParams.update({
 
 num_points = 30
 x_range = (0,2 * np.pi)
-delta_x = (x_range[1] - x_range[0]) / num_points
+delta_x = (x_range[1] - x_range[0]) / (num_points-1)
 x_points = np.linspace(x_range[0],x_range[1], num_points, endpoint=False)
 
 f = lambda x: np.exp(np.sin(x))
