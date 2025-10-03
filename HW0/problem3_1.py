@@ -32,8 +32,8 @@ x_vals = np.linspace(x_range[0], x_range[1], n_points)
 
 # Calculating the forcing vector
 f = forcing_fxn(x_vals[1:(n_points-1)])
-# f[0] = f[0] - phi_0 / (delta_x**2) - phi_0 / (2*delta_x)
-f[-1] = f[-1] - phi[-1] / (delta_x**2) - phi[-1] / (2*delta_x)
+f[0] -= phi[0] / (delta_x**2) + phi[0] / (2*delta_x)
+f[-1] -= phi[-1] / (delta_x**2) - phi[-1] / (2*delta_x)
 
 # Central differences 2nd derivative
 D_xx = np.zeros((n_points - 2, n_points - 2))
@@ -45,8 +45,8 @@ D_xx /= (delta_x ** 2)
 # Central differences 1st derivative
 D_x = np.zeros((n_points - 2, n_points - 2))
 D_x += np.eye(n_points - 2, k=1)
-D_x += np.eye(n_points - 2, k=-1)
-D_x = D_x @ np.diag(np.sin(x_vals[1:(n_points-1)]))
+D_x += np.eye(n_points - 2, k=-1) * -1
+D_x = (D_x.T @ np.diag(np.sin(x_vals[1:(n_points-1)]))).T
 D_x /= (2 * delta_x)
 
 A = csr_matrix(D_xx + D_x + np.eye(n_points - 2))

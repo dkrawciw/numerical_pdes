@@ -21,13 +21,14 @@ plt.rcParams.update({
 x_range = (0,2 * np.pi)
 num_of_step_sizes = 30
 
+
 h = []
 error_2norm = []
 error_infnorm = []
+list_of_number_of_points = list(range(10,510,20))
 
-for num_points in np.linspace(5,100,num_of_step_sizes):
+for num_points in list_of_number_of_points:
 
-    num_points = int(num_points)
     delta_x = (x_range[1] - x_range[0]) / (num_points - 1)
 
     x_points = np.linspace(x_range[0],x_range[1], num_points)
@@ -52,16 +53,16 @@ for num_points in np.linspace(5,100,num_of_step_sizes):
 
 
 # plt.plot(h, np.ones(num_of_step_sizes), '-r')
-plt.loglog(h, error_infnorm, "--o",label=r"$\infty$-Norm Relative Error")
-plt.loglog(h, error_2norm, '-o', label=r"2-Norm Relative Error")
+plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=4, markersize=8, label=r"$\infty$-Norm Relative Error")
+plt.loglog(list_of_number_of_points, error_2norm, '-o', linewidth=4, markersize=8, label=r"2-Norm Relative Error")
 
 plt.legend()
 plt.title("Comparing the Relative Errors of the 2-norm and\nthe $\infty$-norm as the Step Size Decreases")
 plt.ylabel(r"$\log \log$error")
-plt.xlabel(r"$h$")
+plt.xlabel("Number of Grid Points")
 # increase number of xticks
 plt.xticks(fontsize=12)
 plt.yticks(fontsize=12)
 
 plt.tight_layout()
-plt.savefig("output/problem1_2_relative_error_plot.svg")
+plt.savefig("output/problem1_2.svg")

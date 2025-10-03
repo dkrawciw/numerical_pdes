@@ -19,9 +19,10 @@ plt.rcParams.update({
 
 num_points = 30
 x_range = (0,2 * np.pi)
-delta_x = (x_range[1] - x_range[0]) / (num_points-1)
-
 x_points = np.linspace(x_range[0],x_range[1], num_points)
+# delta_x = (x_range[1] - x_range[0]) / (num_points-1)
+delta_x = x_points[1] - x_points[0]
+
 f = lambda x: np.exp(np.sin(x))
 f_prime = lambda x: np.cos(x) * np.exp(np.sin(x))
 
@@ -34,8 +35,8 @@ for i in range(1, num_points - 1):
 numerical_f_prime[0] = (f_vals[1] - f_vals[0]) / delta_x
 numerical_f_prime[-1] = (f_vals[-1] - f_vals[-2]) / delta_x
 
-plt.plot(x_points, f_prime(x_points), linewidth=4, label="Analytical Solution")
-plt.plot(x_points, numerical_f_prime, "--o", markersize=6, linewidth=4,label="Numerical Solution")
+plt.plot(x_points, numerical_f_prime, "-o", markersize=8, linewidth=4,label="Numerical Solution")
+plt.plot(x_points, f_prime(x_points), "--",linewidth=4, label="Analytical Solution")
 
 plt.title("Analytical and Numerical Solutions\nof the Derivative of the Given Function $f(x)$", fontsize=16)
 plt.legend()

@@ -17,10 +17,11 @@ plt.rcParams.update({
     "legend.fontsize": 12,
 })
 
-num_points = 30
+num_points = 40
 x_range = (0,2 * np.pi)
-delta_x = (x_range[1] - x_range[0]) / (num_points-1)
+# delta_x = (x_range[1] - x_range[0]) / (num_points-1)
 x_points = np.linspace(x_range[0],x_range[1], num_points, endpoint=False)
+delta_x = x_points[1] - x_points[0]
 
 f = lambda x: np.exp(np.sin(x))
 f_double_prime = lambda x: (np.square(np.cos(x)) - np.sin(x)) * np.exp(np.sin(x))
@@ -34,12 +35,12 @@ D = D + np.eye(num_points, k=1)
 D = D + np.eye(num_points, k=-1)
 D[0,-1] = 1
 D[-1,0] = 1
-numerical_f_double_prime = 1 / (delta_x ** 2) * D@f_vals
+numerical_f_double_prime = D@f_vals / (delta_x ** 2)
 
-# plt.plot(x_points, f_vals, label="$f(x)$")
 
-plt.plot(x_points, f_double_prime_vals, linewidth=4, label="Analytical Solution")
-plt.plot(x_points, numerical_f_double_prime, "--o", markersize=8, linewidth=4, label="Numerical Solution")
+
+plt.plot(x_points, numerical_f_double_prime, "-o", markersize=8, linewidth=4, label="Numerical Solution")
+plt.plot(x_points, f_double_prime_vals, "--", linewidth=4, label="Analytical Solution")
 
 plt.title("Analytical and Numerical Solutions of the\nSecond Derivative of the Given Function $f(x)$", fontsize=16)
 plt.xlabel(r"$x$")

@@ -27,8 +27,9 @@ y_range = (0, 5)
 h_vals = []
 error_2norm = []
 error_infnorm = []
+list_of_number_of_points = list(range(50,1000,50))
 
-for n in list(range(50,1000,50)):
+for n in list_of_number_of_points:
     # number of grid points is `n`, so there are (n-1) intervals
     h = (x_range[1] - x_range[0]) / (n - 1)
     h_vals.append(h)
@@ -82,10 +83,10 @@ for n in list(range(50,1000,50)):
     error_2norm.append(error_2)
     error_infnorm.append(error_inf)
 
-plt.loglog(h_vals, error_2norm, "-o", linewidth=4, markersize=8, label="2-Norm Error")
-plt.loglog(h_vals, error_infnorm, "-o", linewidth=4, markersize=8, label="$\infty$-Norm Error")
+plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=4, markersize=8, label="$\infty$-Norm Error")
+plt.loglog(list_of_number_of_points, error_2norm, "-o", linewidth=4, markersize=8, label="2-Norm Error")
 
-plt.xlabel("$h$")
+plt.xlabel("Number of Grid Points")
 plt.ylabel("Error")
 plt.title("Error Convergence of the Numerical Solution of\nthe Poisson Equation as $h$ approaches $0$")
 plt.legend()
