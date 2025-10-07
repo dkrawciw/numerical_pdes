@@ -51,6 +51,7 @@ for num_points in list_of_number_of_points:
     error_2norm.append(curr_error_2norm)
     error_infnorm.append(curr_error_infnorm)
 
+plt.figure(figsize=(8,5))
 
 # plt.plot(h, np.ones(num_of_step_sizes), '-r')
 plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=4, markersize=8, label=r"$\infty$-Norm Relative Error")

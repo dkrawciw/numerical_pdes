@@ -83,12 +83,14 @@ for n in list_of_number_of_points:
     error_2norm.append(error_2)
     error_infnorm.append(error_inf)
 
+plt.figure(figsize=(8,5))
+
 plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=4, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "-o", linewidth=4, markersize=8, label="2-Norm Error")
 
 plt.xlabel("Number of Grid Points")
 plt.ylabel("Error")
-plt.title("Error Convergence of the Numerical Solution of\nthe Poisson Equation as $h$ approaches $0$")
+plt.title("Error Convergence of the Numerical Solution of\nthe Poisson Equation as the number of Grid Points Increases")
 plt.legend()
 
 plt.tight_layout()

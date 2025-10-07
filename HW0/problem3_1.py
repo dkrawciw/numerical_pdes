@@ -53,7 +53,7 @@ A = csr_matrix(D_xx + D_x + np.eye(n_points - 2))
 
 phi[1:-1] = spsolve(A, f)
 
-plt.figure(figsize=(7.5,5))
+plt.figure(figsize=(8,5))
 
 plt.plot(x_vals, phi, 'o-', label='Numerical Approximation', linewidth=4, markersize=8)
 plt.plot(x_vals, np.sin(x_vals), '--', label=r'Exact Solution $\sin(x)$', linewidth=4, markersize=8)

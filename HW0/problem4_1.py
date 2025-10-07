@@ -67,7 +67,7 @@ u = spsolve(L, f)
 # Reshape u to be a matrix to be easily plottable
 U[1:-1,1:-1] = u.reshape((n-2,n-2), order="F")
 
-plt.figure(figsize=(8,6))
+plt.figure(figsize=(8,5))
 plt.contourf(X, Y, U, levels=50, cmap='viridis')
 plt.colorbar(label=r'$u(x,y)$')
 plt.xlabel(r'$x$')
@@ -75,5 +75,3 @@ plt.ylabel(r'$y$')
 plt.title('Numerical Approximation to Poisson Equation\nwith Solution $u(x,y) = \sin{x} \cos{y}$', fontsize=16)
 plt.tight_layout()
 plt.savefig("output/problem4_1.svg")
-
-plt.clf()

@@ -19,7 +19,7 @@ plt.rcParams.update({
     "legend.fontsize": 12,
 })
 
-list_of_number_of_points = list(range(10,510,20))
+list_of_number_of_points = list(range(10,10000,1000))
 n_points = 30
 
 error_2_list = []
@@ -68,6 +68,8 @@ for n_points in list_of_number_of_points:
 
     error_2_list.append(error_2)
     error_inf_list.append(error_inf)
+
+plt.figure(figsize=(8,5))
 
 plt.loglog(list_of_number_of_points, error_inf_list, "-o", linewidth=5, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2_list, "-o", linewidth=5, markersize=8, label="2-Norm Error")

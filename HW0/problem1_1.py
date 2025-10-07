@@ -35,6 +35,8 @@ for i in range(1, num_points - 1):
 numerical_f_prime[0] = (f_vals[1] - f_vals[0]) / delta_x
 numerical_f_prime[-1] = (f_vals[-1] - f_vals[-2]) / delta_x
 
+plt.figure(figsize=(8,5))
+
 plt.plot(x_points, numerical_f_prime, "-o", markersize=8, linewidth=4,label="Numerical Solution")
 plt.plot(x_points, f_prime(x_points), "--",linewidth=4, label="Analytical Solution")
 

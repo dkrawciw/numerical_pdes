@@ -37,7 +37,7 @@ D[0,-1] = 1
 D[-1,0] = 1
 numerical_f_double_prime = D@f_vals / (delta_x ** 2)
 
-
+plt.figure(figsize=(8,5))
 
 plt.plot(x_points, numerical_f_double_prime, "-o", markersize=8, linewidth=4, label="Numerical Solution")
 plt.plot(x_points, f_double_prime_vals, "--", linewidth=4, label="Analytical Solution")
