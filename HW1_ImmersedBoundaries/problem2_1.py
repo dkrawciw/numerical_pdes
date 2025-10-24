@@ -169,3 +169,16 @@ plt.tight_layout()
 
 # plt.show()
 plt.savefig("output/problem2_1.svg")
+
+plt.clf()
+
+plt.figure(figsize=(8,7))
+plt.plot(thetas, q, "--o", label="Immersed Boundary Points", linewidth=6, markersize=10)
+
+plt.xlabel(r'$\theta$ $[0,2 \pi]$', fontsize=16)
+plt.ylabel('Immersed Boundary Charge (Coulombs)', fontsize=16)
+plt.title("Point Charges from Solving the Immersed\nBoundary Problem with a Forced Solution", fontsize=20)
+
+plt.tight_layout()
+plt.legend()
+plt.savefig("output/problem2_1_charges.svg")
