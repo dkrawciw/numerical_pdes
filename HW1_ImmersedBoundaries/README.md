@@ -18,7 +18,17 @@ Here, we can see that the slopes of both errors match the slope of the reference
 
 !["Error Convergence of Solving Immersed Boundary Value Problem"](output/problem2_2.svg)
 
+### part a
+
+I found that the underlying grid stayed the same, at least to the eye. I suspect that this is because the immersed boundary points are not actually forcing a different shape on the underlying "fluid", they are simply matching the values at those points.
+
+We can see here that the solution is the same as the one from problem 1, but with these immersed points that actually carry a charge that is solved for with this problem. Here, we can see the values of the solved charges for our immersed boundary:
+
+![""](output/problem2_1_charges.svg)
+
 ## Problem 3
+
+For this problem, we do the same as problem 2, except we fix the boundary with Dirchelet BCs of $0$ and we make the forcing function $f(x,y) = 0$ too.
 
 ![""](output/problem3_1_2D.svg)
 
@@ -26,3 +36,6 @@ Here, we can see that the slopes of both errors match the slope of the reference
 
 ## Problem 4
 
+Here, I chose to add "interesting-looking" shapes and observe what the surface looks like.
+
+![""](output/problem4.svg)
