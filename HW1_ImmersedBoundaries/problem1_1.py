@@ -22,7 +22,7 @@ plt.rcParams.update({
 })
 
 """Numerical Approximation"""
-n = 40
+n = 50
 x_range = (0, 2*np.pi)
 y_range = (0, 2*np.pi)
 x_vals = np.linspace(x_range[0], x_range[1], n)
@@ -67,8 +67,8 @@ u = spsolve(L, f)
 # Reshape u to be a matrix to be easily plottable
 U[1:-1,1:-1] = u.reshape((n-2,n-2), order="F")
 
-plt.figure(figsize=(8,5))
-plt.contourf(X, Y, U, levels=50, cmap='viridis')
+plt.figure(figsize=(8,7))
+plt.contourf(X, Y, U, levels=50, cmap='icefire')
 plt.colorbar(label=r'$u(x,y)$')
 plt.xlabel(r'$x$')
 plt.ylabel(r'$y$')
