@@ -11,3 +11,18 @@ The following is the numerical solution to the Poisson Equation: $$\nabla^2 u = 
 !["Error Convergence of the Numerical Method"](output/problem1_2.svg)
 
 Here, we can see that the slopes of both errors match the slope of the reference error. Thus, the error of this method is second error.
+
+## Problem 2
+
+!["Immersed Boundary Plot Solved with Points Displayed"](output/problem2_1.svg)
+
+!["Error Convergence of Solving Immersed Boundary Value Problem"](output/problem2_2.svg)
+
+## Problem 3
+
+![""](output/problem3_1_2D.svg)
+
+![""](output/problem3_1_scatter.svg)
+
+## Problem 4
+
