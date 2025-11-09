@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.sparse import csr_matrix, kron, eye
 from scipy.sparse.linalg import spsolve
+from sksparse.cholmod import cholesky
 
 from time_steppers import generate_error_plots
 
@@ -55,6 +56,8 @@ for N_t in list_of_number_of_points:
     U = np.sin(X)*np.sin(Y)
     u = U[1:-1,1:-1].ravel(order="F")
 
+    LHS = cholesky(eye((N-2)**2, format="csr") - delta_t * L)
+
     # Forward Euler
     for i in range(N_t-1):
         t = delta_t * i
@@ -62,7 +65,10 @@ for N_t in list_of_number_of_points:
         F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t)
         f = F.ravel(order="F")
 
-        u = (delta_t * L + eye((N-2)**2, format="csr"))@u + delta_t*f
+        # LHS = eye((N-2)**2, format="csr") - delta_t * L
+        RHS = u + delta_t*f
+        # u = spsolve(LHS, RHS)
+        u = LHS(RHS)
 
     U[1:-1,1:-1] = u.reshape((N-2,N-2), order="F")
     exact_soln = np.cos(10*t_range[1])*np.sin(X)*np.sin(Y)
@@ -77,12 +83,12 @@ plt.figure(figsize=(8,5))
 
 plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "--o", linewidth=4, markersize=8, label="2-Norm Error")
-plt.loglog(list_of_number_of_points,  1/np.array(list_of_number_of_points), "k", label=r"Reference $O(n)$ Convergence")
+plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)), "k", label=r"Reference $O(n)$ Convergence")
 
 plt.xlabel("Number of Time Points")
 plt.ylabel(r"$\log \log$ Error")
-plt.title("Error Convergence of the Numerical Solution\nUsing Forward Euler")
+plt.title("Error Convergence of the Numerical Solution\nUsing Backward Euler")
 plt.legend()
 
 plt.tight_layout()
-plt.savefig("output/problem1_ForwardEuler.svg")
+plt.savefig("output/problem1_BackwardEuler.svg")

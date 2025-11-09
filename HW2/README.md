@@ -10,6 +10,8 @@ Daniel Krawciw
 
 ### Backward Euler
 
+![Backward Euler Error Convergence](output/problem1_BackwardEuler.svg)
+
 ### Crank-Nicolson
 
 ### Explicit Midpoint (RK2)
