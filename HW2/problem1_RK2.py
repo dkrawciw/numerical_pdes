@@ -5,6 +5,8 @@ from scipy.sparse.linalg import spsolve
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import pickle as pkl
+
 """Plot setup"""
 sns.set_style("whitegrid")
 sns.set_color_codes(palette="colorblind")
@@ -57,11 +59,19 @@ for N_t in list_of_number_of_points:
     for i in range(N_t-1):
         t = delta_t * i
 
+        # Step 1
         F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t)
         f = F.ravel(order="F")
+        k1 = L@u + f
+        
+        u_half = u + (delta_t / 2) * k1
 
-        u_half = (delta_t * L + eye((N-2)**2, format="csr"))@u + delta_t*f
-        u = delta_t*L@u + u + delta_t*f
+        # Step 2
+        F_half = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t + delta_t/2)
+        f_half = F_half.ravel(order="F")
+        k2 = L@u_half + f_half
+
+        u = u + delta_t * k2
 
     U[1:-1,1:-1] = u.reshape((N-2,N-2), order="F")
     exact_soln = np.cos(10*t_range[1])*np.sin(X)*np.sin(Y)
@@ -77,6 +87,15 @@ plt.figure(figsize=(8,5))
 plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "--o", linewidth=4, markersize=8, label="2-Norm Error")
 plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)**2), "k", label=r"Reference $O(n^2)$ Convergence")
+
+# Write 2 norm error values to a pickle file
+pkl_obj = {
+    "name": "RK2",
+    "two_norm": error_2norm,
+    "time_points": list_of_number_of_points,
+}
+with open("output/rk2.pkl", "wb") as pkl_file:
+    pkl.dump(pkl_obj, pkl_file)
 
 plt.xlabel("Number of Time Points")
 plt.ylabel(r"$\log \log$ Error")
