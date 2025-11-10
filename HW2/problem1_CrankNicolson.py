@@ -6,6 +6,8 @@ from sksparse.cholmod import cholesky
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import pickle as pkl
+
 """Plot setup"""
 sns.set_style("whitegrid")
 sns.set_color_codes(palette="colorblind")
@@ -60,7 +62,9 @@ for N_t in list_of_number_of_points:
     for i in range(N_t-1):
         t = delta_t * i
 
-        F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t)
+        F_now = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t)
+        F_next = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t+delta_t)
+        F = (F_next + F_now)/2
         f = F.ravel(order="F")
 
         # LHS = eye((N-2)**2, format="csr") - delta_t * L
@@ -76,6 +80,15 @@ for N_t in list_of_number_of_points:
 
     error_infnorm.append(err_inf)
     error_2norm.append(err_2)
+
+# Write 2 norm error values to a pickle file
+pkl_obj = {
+    "name": "Crank-Nicolson",
+    "two_norm": error_2norm,
+    "time_points": list_of_number_of_points,
+}
+with open("output/CrankNicolson.pkl", "wb") as pkl_file:
+    pkl.dump(pkl_obj, pkl_file)
 
 plt.figure(figsize=(8,5))
 
