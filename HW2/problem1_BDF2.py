@@ -6,6 +6,8 @@ from sksparse.cholmod import cholesky
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import pickle as pkl
+
 """Plot setup"""
 sns.set_style("whitegrid")
 sns.set_color_codes(palette="colorblind")
@@ -22,7 +24,7 @@ plt.rcParams.update({
     "legend.fontsize": 12,
 })
 
-list_of_number_of_points = list(range(10,1010,10))
+list_of_number_of_points = list(range(4000,10010,100))
 error_infnorm = []
 error_2norm = []
 
@@ -38,13 +40,14 @@ for N_t in list_of_number_of_points:
     x_vals = np.linspace(x_range[0], x_range[1], N)
     y_vals = np.linspace(y_range[0], y_range[1], N)
     X,Y = np.meshgrid(x_vals, y_vals)
-    h = X[1,0] - X[0,0]
+    h = X[0,1] - X[0,0]
 
     # Create the Laplacian
     D = np.zeros((N-2,N-2))
     D += np.eye(N - 2, k=0) * -2
     D += np.eye(N - 2, k=1)
     D += np.eye(N - 2, k=-1)
+    D /= h**2
     D = csr_matrix(D)
     L = kron(eye(N-2, format="csr"), D, format="csr") + kron(D, eye(N-2, format="csr"), format="csr")
 
@@ -56,10 +59,19 @@ for N_t in list_of_number_of_points:
     u = soln[0,1:-1,1:-1].ravel(order="F")
 
     """Before BDF2, I need to run RK2 once"""
-    F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], delta_t)
-    f = F.ravel(order="F")
-    u_half = (delta_t * L + eye((N-2)**2, format="csr"))@u + delta_t*f
-    u = delta_t*L@u + u + delta_t*f
+    # Step 1
+    F_now = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], 0)
+    f = F_now.ravel(order="F")
+    k1 = L@u + f
+
+    u_half = u + (delta_t / 2) * k1
+
+    # Step 2
+    F_half = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], delta_t/2)
+    f = F_half.ravel(order="F")
+    k2 = L@u_half + f
+
+    u = u + delta_t * k2
     soln[1,1:-1,1:-1] = u.reshape((N-2,N-2), order="F")
 
     """After running RK2, we now have a history point to use for BDF2"""
@@ -71,7 +83,7 @@ for N_t in list_of_number_of_points:
         u_hist = soln[i-1, 1:-1, 1:-1].ravel(order="F")
         u_curr = soln[i, 1:-1, 1:-1].ravel(order="F")
 
-        F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t)
+        F = forcing_fxn(X[1:-1,1:-1], Y[1:-1,1:-1], t + delta_t)
         f = F.ravel(order="F")
 
         # LHS = eye((N-2)**2, format="csr") - delta_t * L
@@ -89,9 +101,18 @@ for N_t in list_of_number_of_points:
     error_infnorm.append(err_inf)
     error_2norm.append(err_2)
 
+# Write 2 norm error values to a pickle file
+pkl_obj = {
+    "name": "BDF2",
+    "two_norm": error_2norm,
+    "time_points": list_of_number_of_points,
+}
+with open("output/BDF2.pkl", "wb") as pkl_file:
+    pkl.dump(pkl_obj, pkl_file)
+
 plt.figure(figsize=(8,5))
 
-plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
+# plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "--o", linewidth=4, markersize=8, label="2-Norm Error")
 plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)**2), "k", label=r"Reference $O(n^2)$ Convergence")
 

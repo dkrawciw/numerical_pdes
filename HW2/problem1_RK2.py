@@ -23,7 +23,7 @@ plt.rcParams.update({
     "legend.fontsize": 12,
 })
 
-list_of_number_of_points = list(range(10,1010,10))
+list_of_number_of_points = list(range(4000,10010,100))
 error_infnorm = []
 error_2norm = []
 
@@ -39,13 +39,14 @@ for N_t in list_of_number_of_points:
     x_vals = np.linspace(x_range[0], x_range[1], N)
     y_vals = np.linspace(y_range[0], y_range[1], N)
     X,Y = np.meshgrid(x_vals, y_vals)
-    h = X[1,0] - X[0,0]
+    h = x_vals[1] - x_vals[0]
 
     # Create the Laplacian
     D = np.zeros((N-2,N-2))
     D += np.eye(N - 2, k=0) * -2
     D += np.eye(N - 2, k=1)
     D += np.eye(N - 2, k=-1)
+    D /= h**2
     D = csr_matrix(D)
     L = kron(eye(N-2, format="csr"), D, format="csr") + kron(D, eye(N-2, format="csr"), format="csr")
 
@@ -84,7 +85,7 @@ for N_t in list_of_number_of_points:
 
 plt.figure(figsize=(8,5))
 
-plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
+# plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "--o", linewidth=4, markersize=8, label="2-Norm Error")
 plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)**2), "k", label=r"Reference $O(n^2)$ Convergence")
 
