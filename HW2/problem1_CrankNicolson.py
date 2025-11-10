@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.sparse import csr_matrix, kron, eye
-from scipy.sparse.linalg import spsolve
+# from scipy.sparse.linalg import spsolve
 from sksparse.cholmod import cholesky
 
 import matplotlib.pyplot as plt
@@ -54,9 +54,9 @@ for N_t in list_of_number_of_points:
     U = np.sin(X)*np.sin(Y)
     u = U[1:-1,1:-1].ravel(order="F")
 
-    LHS = cholesky(eye((N-2)**2, format="csr") - delta_t * L)
+    # Crank-Nicolson
+    LHS = cholesky(eye((N-2)**2, format="csr") - delta_t/2 * L)
 
-    # Backward Euler
     for i in range(N_t-1):
         t = delta_t * i
 
@@ -64,7 +64,7 @@ for N_t in list_of_number_of_points:
         f = F.ravel(order="F")
 
         # LHS = eye((N-2)**2, format="csr") - delta_t * L
-        RHS = u + delta_t*f
+        RHS = (eye((N-2)**2, format="csr") + delta_t/2 * L)@u + delta_t*f
         # u = spsolve(LHS, RHS)
         u = LHS(RHS)
 
@@ -81,12 +81,12 @@ plt.figure(figsize=(8,5))
 
 plt.loglog(list_of_number_of_points, error_infnorm, "-o", linewidth=6, markersize=8, label="$\infty$-Norm Error")
 plt.loglog(list_of_number_of_points, error_2norm, "--o", linewidth=4, markersize=8, label="2-Norm Error")
-plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)), "k", label=r"Reference $O(n)$ Convergence")
+plt.loglog(list_of_number_of_points,  1/(np.array(list_of_number_of_points)**2), "k", label=r"Reference $O(n^2)$ Convergence")
 
 plt.xlabel("Number of Time Points")
 plt.ylabel(r"$\log \log$ Error")
-plt.title("Error Convergence of the Numerical Solution\nUsing Backward Euler")
+plt.title("Error Convergence of the Numerical Solution\nUsing Crank-Nicolson")
 plt.legend()
 
 plt.tight_layout()
-plt.savefig("output/problem1_BackwardEuler.svg")
+plt.savefig("output/problem1_CrankNicolson.svg")

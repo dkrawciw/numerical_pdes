@@ -2,8 +2,6 @@ import numpy as np
 from scipy.sparse import csr_matrix, kron, eye
 from scipy.sparse.linalg import spsolve
 
-from time_steppers import generate_error_plots
-
 import matplotlib.pyplot as plt
 import seaborn as sns
 

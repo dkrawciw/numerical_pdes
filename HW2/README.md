@@ -14,6 +14,8 @@ Daniel Krawciw
 
 ### Crank-Nicolson
 
+![Crank-Nicolson Error Convergence](output/problem1_CrankNicolson.svg)
+
 ### Explicit Midpoint (RK2)
 
 ### BDF2
