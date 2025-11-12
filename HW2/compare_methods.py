@@ -38,7 +38,7 @@ for i, file in enumerate(pkl_files):
     # else:
     marker_style = "-o"
 
-    plt.loglog(time_points, err_points, marker_style, linewidth=6, markersize=7, label=label)
+    plt.loglog(time_points, err_points, marker_style, linewidth=3, markersize=5, label=label)
 
 with open(pkl_files[0], 'rb') as pkl_file:
     pkl_obj = pkl.load(pkl_file)
