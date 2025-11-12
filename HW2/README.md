@@ -4,6 +4,12 @@ Daniel Krawciw
 
 ## Problem 1
 
+The following are figures that look at the error convergence of different time-stepping methods. I am only using the two-norm for the following error calculations.
+
+![Figure comparing the error convergence of first order methods](output/compare_first_order_methods.svg)
+
+![Figure comparing the error convergence of second order methods](output/compare_second_order_methods.svg)
+
 Using the two-norm, I compared the error convergence of all the methods from this class here:
 
 ![Plot comparing the error convergence of all methods](output/compare_all_methods.svg)
