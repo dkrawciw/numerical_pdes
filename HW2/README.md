@@ -47,3 +47,11 @@ Here, I used RK2 first to get two points, then I was able to use BDF2 with a his
 ![ODE45 Error Convergence Plot](output/problem1_ODE45.svg) -->
 
 ## Problem 2
+
+| Time Stepper      | 5e-2 | 1e-3 | 5e-6 |
+|-------------------|------|------|------|
+| Forward Euler     |   3007   |   5433   |   >1e10   |
+| Backward Euler    |      |      |      |
+| Crank-Nicolson    |      |      |      |
+| RK2               |      |      |      |
+| BDF2              |      |      |      |
