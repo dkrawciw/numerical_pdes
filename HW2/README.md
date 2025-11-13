@@ -50,8 +50,34 @@ Here, I used RK2 first to get two points, then I was able to use BDF2 with a his
 
 | Time Stepper      | 5e-2 | 1e-3 | 5e-6 |
 |-------------------|------|------|------|
-| Forward Euler     |   3007   |   5433   |   >1e10   |
-| Backward Euler    |      |      |      |
-| Crank-Nicolson    |      |      |      |
-| RK2               |      |      |      |
-| BDF2              |      |      |      |
+| Forward Euler     |   2506   |   5438   |   too many to compute   |
+| Backward Euler    |   1105   |   6512   |   too many to compute   |
+| Crank-Nicolson    |   215   |   1495   |   7196   |
+| RK2               |   2507 (couldn't have fewer than this)   |   2507   |   7184   |
+| BDF2              |   253   |   1750   |   7196   |
+
+### Calculating cost for each method
+
+Forward Euler Cost = (num_of_steps) * (1 matrix multiplication * (5*64^2 cost per matrix mult.)) = (num_of_steps) * 20480
+
+Backward Euler Cost = (cholesky factorization cost) + (num_of_steps) * (1 sparse matrix solve * (64^2 * log(64^2) cost per matrix solve)) = 262144 + (num_of_steps) * 14796.23
+
+Crank-Nicolson Cost = (cholesky factorization cost) + (num_of_steps) * ( (1 sparse matrix solve * 14796.23) + (1 sparse matrix mult. * 20480) ) = 262144 + (num_of_steps) * 35276.23
+
+RK2 Cost = (num_of_steps) * (2 sparse matrix solves * 64^2 * log(64^2) cost per matrix solve ) = (num_of_steps) * 29592.45
+
+BDF2 Cost = (cholesky factorization cost) + (cost of one RK2 iteration) + (num_of_steps - 1) * 14796.22 cost per iteration of BDF2 = 262144 + 29592.45 + (num_of_steps - 1) * 14796.22
+
+### Cost Table
+
+| Time Stepper      | 5e-2 | 1e-3 | 5e-6 |
+|-------------------|------|------|------|
+| Forward Euler     |   51322880   |   111370240   |   --   |
+| Backward Euler    |   16349830.11   |   96353049.76   |   --   |
+| Crank-Nicolson    |   7846533.45   |   53000107.85   |   254109895.08   |
+| RK2               |   74188272.15   |   74188272.15   |   212592160.8   |
+| BDF2              |   4020383.89   |   26170325.23   |   106750539.35   |
+
+I found that, for each error tolerance, BDF2 won in efficiency. This makes sense as it's an implicit method that relies of history points ($u^{n-1}$) so it's stable. Also, there is just one solve and one cholesky factorization, so there is much simplicity in the calculation itself.
+
+I thought that maybe RK2 would be a good method, but I found that because the method was not as stable as an implicit method, that "competitive step sizes" (step sizes small enough to bring the cost down) would blow up.

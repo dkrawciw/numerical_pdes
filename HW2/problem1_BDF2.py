@@ -77,7 +77,7 @@ for N_t in list_of_number_of_points:
     """After running RK2, we now have a history point to use for BDF2"""
     LHS = cholesky(eye((N-2)**2, format="csr") - 2/3* delta_t * L)
 
-    # Backward Euler
+    # BDF2
     for i in range(1,N_t-1):
         t = delta_t * i
         u_hist = soln[i-1, 1:-1, 1:-1].ravel(order="F")
