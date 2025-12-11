@@ -46,6 +46,7 @@ eps = h
 np.random.seed(102)
 u = eps*np.random.rand(N * N)
 u = u - np.mean(u)
+phi_0 = u.copy()
 
 D = np.zeros((N,N))
 D += np.eye(N, k=0) * -2
@@ -64,7 +65,10 @@ areas = [np.trapezoid(np.trapezoid(U, x=x_vals, axis=0), x=y_vals)]
 
 for n in tqdm(range(1,N_t)):
     phi_star = LHS.solve_A(u)
-    u = phi_star * np.exp(dt) / np.sqrt(1 + phi_star**2 * (np.exp(2*dt) - 1))
+    u_star = phi_star * np.exp(dt) / np.sqrt(1 + phi_star**2 * (np.exp(2*dt) - 1))
+
+    beta = (np.sum(phi_0 - u_star)/np.sum(np.sqrt( (u_star**2 - 1)**2 / 4 ))) / dt
+    u = dt*beta*np.sqrt((u_star**2 - 1)**2 / 4) + u_star
 
     U = u.reshape((N, N), order="F")
     areas.append(np.trapezoid(np.trapezoid(U, x=x_vals, axis=0), x=y_vals))
@@ -76,10 +80,10 @@ plt.contourf(X, Y, U, levels=50, cmap='icefire')
 plt.colorbar(label=r'$u(x,y)$')
 plt.xlabel(r'$x$')
 plt.ylabel(r'$y$')
-plt.title('Random Allen Cahn Solution', fontsize=16)
+plt.title('Random Allen Cahn Solution with Conservation of Mass', fontsize=16)
 
 plt.tight_layout()
-plt.savefig("output/problem1.svg")
+plt.savefig("output/problem2.svg")
 
 plt.clf()
 
@@ -88,7 +92,7 @@ plt.figure(figsize=(6,5))
 plt.plot(np.linspace(t_range[0], t_range[1], N_t), areas)
 plt.xlabel('Time (s)')
 plt.ylabel(r'Mass of $\phi$')
-plt.title('Change in Mass Over Time in\nthe Given Region', fontsize=16)
+plt.title('Change in Mass Over Time in the Given\nRegion with Mass Conservation', fontsize=16)
 
 plt.tight_layout()
-plt.savefig("output/problem1_mass_plot.svg")
+plt.savefig("output/problem2_mass_plot.svg")
